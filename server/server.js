@@ -22,13 +22,31 @@ io.on('connection',(socket)=>{
         console.log('Disconnected from client');
     });
 
+    socket.emit('newMessage',{
+        from : 'Admin',
+        text : 'Welcome to chat app!',
+        createdAt : new Date().getTime()
+    });
+
+    socket.broadcast.emit('newMessage',{
+        from : 'Admin',
+        text : 'New user has joined!!',
+        createdAt : new Date().getTime()
+    })
+
     socket.on('createMessage',(message)=>{
-        //console.log('createMessage',message);
+        console.log('createMessage',message);
         io.emit('newMessage',{
             from: message.from,
             text : message.text,
             createdAt : new Date().getTime()
         })
+
+        // socket.broadcast.emit('newMessage',{
+        //     from : message.from,
+        //     text : message.text,
+        //     createdAt : new Date().getTime().toString()
+        // })
     });
 });
 
