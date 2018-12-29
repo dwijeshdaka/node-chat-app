@@ -31,6 +31,7 @@ jQuery('#message-form').on('submit',function(e){
         text: jQuery('[name=message]').val()
     },function(data){
         // console.log('Got it',data);
+        jQuery('[name=message]').val('')
     });
 });
 
@@ -40,13 +41,17 @@ sendLocation.on('click',function(){
         return alert('Geolocation not supported by ypur browser!');
     }
 
+    sendLocation.attr('disabled','disabled').text('Sending location...');
+
     navigator.geolocation.getCurrentPosition(function(position){
         console.log(position);
+        sendLocation.removeAttr('disabled').text('Send location');
         socket.emit('createLocationMessage',{
             latitude : position.coords.latitude,
             longitude : position.coords.longitude
         });
     },function(){
+        sendLocation.removeAttr('disabled').text('Send location');
         alert('Unable to get location');
     })
 });
